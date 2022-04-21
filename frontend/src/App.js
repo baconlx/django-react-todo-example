@@ -1,40 +1,25 @@
 import React, { Component } from "react";
-
-const todoItems = [
-  {
-    id: 1,
-    title: "Task A",
-    description: "Task A",
-    completed: true,
-  },
-  {
-    id: 2,
-    title: "Task B",
-    description: "Task B",
-    completed: false,
-  },
-  {
-    id: 3,
-    title: "Task C",
-    description: "Task C",
-    completed: true,
-  },
-  {
-    id: 4,
-    title: "Task D",
-    description: "Task D",
-    completed: false,
-  },
-];
+import axios from "axios";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       viewCompleted: false,
-      todoList: todoItems,
+      todoList: [],
     };
   }
+
+  componentDidMount() { 
+    this.refreshList();
+  }
+
+  refreshList = () => {
+    axios
+      .get("/api/todos/")
+      .then((res) => this.setState({ todoList: res.data }))
+      .catch((err) => console.log(err));
+  };
 
   displayCompleted = (status) => {
     if (status) {
